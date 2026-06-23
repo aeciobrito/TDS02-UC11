@@ -42,5 +42,42 @@ namespace UtilitariosApp.Tests
 
             Assert.Equal(5, resultado);
         }
+
+        [Fact]
+        public void Subtrair_DeveRetornarASubtracao()
+        {
+            Calculadora c1 = new Calculadora();
+            var resultado = c1.SubtrairPositivoOuZero(6, 2);
+
+            Assert.Equal(4, resultado);
+        }
+
+        [Fact]
+        public void Subtrair_AoSubtrairValorMaiorDeMenor_ResultadoEhZero()
+        {
+            Calculadora c1 = new Calculadora();
+            var resultado = c1.SubtrairPositivoOuZero(2, 10);
+
+            Assert.Equal(0, resultado);
+        }
+
+        [Theory]
+        [InlineData(10, 3, 1000)]
+        [InlineData(10, 2, 100)]
+        [InlineData(5, 2, 25)]
+        [InlineData(5, 3, 125)]
+        [InlineData(2, 5, 32)]
+        [InlineData(2, -2, 0.25)]
+        [InlineData(2, 0, 1)]
+        [InlineData(-32, 0, 1)]
+        [InlineData(15, 1, 15)]
+        [InlineData(-15, 1, -15)]
+        public void PotenciaDeUmNumero_DeveRetornarAPotencia(int a, int b, double pot)
+        {
+            Calculadora c1 = new Calculadora();
+            var resultado = c1.PotenciaDeUmNumero(a, b);
+
+            Assert.Equal(pot, resultado);
+        }
     }
 }

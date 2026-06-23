@@ -1,4 +1,6 @@
-﻿namespace UtilitariosApp
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace UtilitariosApp
 {
     public class Calculadora
     {
@@ -18,6 +20,16 @@
 
             var resultado = a / b;
             return (int)Math.Ceiling(resultado);
+        }
+
+        public int SubtrairPositivoOuZero(int a, int b)
+        {
+            return b > a ? 0 : a - b;
+        }
+
+        public double PotenciaDeUmNumero(int @base, int expoente)
+        {
+            return Math.Pow(@base, expoente);
         }
     }
 }
