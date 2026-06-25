@@ -79,5 +79,32 @@ namespace UtilitariosApp.Tests
 
             Assert.Equal(pot, resultado);
         }
+        
+        [Theory]
+        [InlineData(9, 3)]
+        [InlineData(16, 4)]
+        [InlineData(25, 5)]
+        public void Raiz_DeveRetornarOresultadoCorreto(int numero, double resultado)
+        {
+            // Arrange
+            var c1 = new Calculadora();
+
+            // Act
+            double raizCalculada = c1.Raiz(numero);
+
+            // Assert
+            Assert.Equal(resultado, raizCalculada);
+        }
+
+        [Fact]
+        public void Raiz_DeUmNumeroNegativo_DeveLancarArgumentException()
+        {
+            // Arrange
+            var c1 = new Calculadora();
+            int numero = -4;
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => c1.Raiz(numero));
+        }
     }
 }

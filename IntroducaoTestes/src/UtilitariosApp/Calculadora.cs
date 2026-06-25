@@ -31,5 +31,16 @@ namespace UtilitariosApp
         {
             return Math.Pow(@base, expoente);
         }
+
+        // Crie 2 testes: um fato, e uma teoria
+        public double Raiz(int a)
+        {
+            if(a < 0)
+            {
+                throw new ArgumentException("Não é possível calcular raiz de 0 ou negativo!");
+            }
+
+            return Math.Sqrt(a);
+        }
     }
 }
