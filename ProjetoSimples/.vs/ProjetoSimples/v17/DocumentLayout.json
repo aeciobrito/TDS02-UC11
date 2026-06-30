@@ -1,12 +1,88 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|c:\\users\\aecio.mbrito\\documents\\tds02-uc11\\projetosimples\\src\\projetosimples.api\\controllers\\produtoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|solutionrelative:src\\projetosimples.api\\controllers\\produtoscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|c:\\users\\aecio.mbrito\\documents\\tds02-uc11\\projetosimples\\src\\projetosimples.api\\services\\iprodutoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|solutionrelative:src\\projetosimples.api\\services\\iprodutoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|c:\\users\\aecio.mbrito\\documents\\tds02-uc11\\projetosimples\\src\\projetosimples.api\\services\\produtoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|solutionrelative:src\\projetosimples.api\\services\\produtoservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|c:\\users\\aecio.mbrito\\documents\\tds02-uc11\\projetosimples\\src\\projetosimples.api\\models\\produto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C017E10E-F6E5-46D4-BE73-BF3F801BD916}|src\\ProjetoSimples.API\\ProjetoSimples.API.csproj|solutionrelative:src\\projetosimples.api\\models\\produto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProdutosController.cs",
+              "DocumentMoniker": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Controllers\\ProdutosController.cs",
+              "RelativeDocumentMoniker": "src\\ProjetoSimples.API\\Controllers\\ProdutosController.cs",
+              "ToolTip": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Controllers\\ProdutosController.cs",
+              "RelativeToolTip": "src\\ProjetoSimples.API\\Controllers\\ProdutosController.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-30T23:24:17.435Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ProdutoService.cs",
+              "DocumentMoniker": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Services\\ProdutoService.cs",
+              "RelativeDocumentMoniker": "src\\ProjetoSimples.API\\Services\\ProdutoService.cs",
+              "ToolTip": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Services\\ProdutoService.cs",
+              "RelativeToolTip": "src\\ProjetoSimples.API\\Services\\ProdutoService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-30T23:21:32.572Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IProdutoService.cs",
+              "DocumentMoniker": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Services\\IProdutoService.cs",
+              "RelativeDocumentMoniker": "src\\ProjetoSimples.API\\Services\\IProdutoService.cs",
+              "ToolTip": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Services\\IProdutoService.cs",
+              "RelativeToolTip": "src\\ProjetoSimples.API\\Services\\IProdutoService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-30T23:04:43.94Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Produto.cs",
+              "DocumentMoniker": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Models\\Produto.cs",
+              "RelativeDocumentMoniker": "src\\ProjetoSimples.API\\Models\\Produto.cs",
+              "ToolTip": "C:\\Users\\aecio.mbrito\\Documents\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\Models\\Produto.cs",
+              "RelativeToolTip": "src\\ProjetoSimples.API\\Models\\Produto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-30T23:01:45.398Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
