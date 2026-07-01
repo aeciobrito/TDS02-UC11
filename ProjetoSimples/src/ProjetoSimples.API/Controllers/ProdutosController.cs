@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ProjetoSimples.API.Models;
 using ProjetoSimples.API.Services;
 
 namespace ProjetoSimples.API.Controllers
@@ -29,7 +30,14 @@ namespace ProjetoSimples.API.Controllers
 
             if (produto == null) return NotFound();
 
-            return Ok();
+            return Ok(produto);
+        }
+
+        [HttpPost]
+        public IActionResult Post(Produto produto)
+        {
+            _produtoService.Adicionar(produto);
+            return CreatedAtAction(nameof(Post), produto);
         }
     }
 }
