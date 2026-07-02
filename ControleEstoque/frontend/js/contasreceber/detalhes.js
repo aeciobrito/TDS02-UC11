@@ -18,7 +18,7 @@ async function buscarDetalhes() {
             <p><strong>Data de Vencimento:</strong> ${dataVencimento}</p>
             <p><strong>Data de Pagamento:</strong> ${dataPagamento}</p>
             <p><strong>Status:</strong> ${conta.status}</p>
-            <p><strong>ID do Cliente:</strong> ${conta.clienteId}</p>
+            <p><strong>Cliente:</strong> ${conta.cliente?.nome || 'Não informado'}</p>
         `;
     } catch (error) {
         console.error("Erro ao carregar detalhes:", error);

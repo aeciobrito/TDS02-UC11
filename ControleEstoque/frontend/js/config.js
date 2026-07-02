@@ -1,6 +1,5 @@
 // Altere a porta de acordo com o que o Visual Studio / .NET CLI mostrar no seu terminal
-// Exemplo: http://localhost:5032
-const API_BASE_URL = 'http://localhost:5143';
+const API_BASE_URL = 'http://localhost:5132';
 async function fetchWithToken(url, options = {}) {
     const token = localStorage.getItem('token');
     const headers = { ...options.headers };

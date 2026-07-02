@@ -1,18 +1,60 @@
 using ControleEstoque.API.Data;
+using ControleEstoque.API.Models;
 using ControleEstoque.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<IFornecedorService, FornecedorService>();
+builder.Services.AddScoped<IProdutoService, ProdutoService>();
+builder.Services.AddScoped<IContaReceberService, ContaReceberService>();
+builder.Services.AddScoped<IFormaPagamentoService, FormaPagamentoService>();
+
+var chaveSecreta = builder.Configuration["Jwt:ChaveSecreta"] ?? "sua_chave_super_secreta_com_minimo_32_caracteres_aqui_2026";
+var emissor = builder.Configuration["Jwt:Emissor"] ?? "ControleEstoque.API";
+var audiencia = builder.Configuration["Jwt:Audiencia"] ?? "ControleEstoque.Clientes";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = emissor,
+            ValidAudience = audiencia,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(chaveSecreta))
+        };
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -20,7 +62,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowFrontend");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -30,14 +73,14 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var passwordService = scope.ServiceProvider.GetRequiredService<IPasswordService>();
 
-    if(!context.Gerentes.Any())
+    if (!context.Gerentes.Any())
     {
-        var admin = new ControleEstoque.API.Models.Gerente
+        var admin = new Gerente
         {
             Nome = "Administrador",
             Email = "admin@mail.com",
             Setor = "TI",
-            Perfil = ControleEstoque.API.Models.PerfilUsuario.Gerente,
+            Perfil = PerfilUsuario.Gerente,
             SenhaHash = passwordService.HashPassword("admin123")
         };
         context.Gerentes.Add(admin);

@@ -12,6 +12,7 @@ async function carregarProdutos() {
                 <td>${produto.id}</td>
                 <td>${produto.nome}</td>
                 <td>R$ ${produto.preco.toFixed(2)}</td>
+                <td>${produto.fornecedor?.nomeFantasia || 'Não informado'}</td>
                 <td class="actions">
                     <a href="detalhes.html?id=${produto.id}">Detalhes</a>
                     <a href="form.html?id=${produto.id}">Editar</a>
