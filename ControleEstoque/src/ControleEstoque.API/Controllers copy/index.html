@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formas de Pagamento - Controle de Estoque</title>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Formas de Pagamento</h1>
+        <nav>
+            <a href="../produtos/index.html">Produtos</a>
+            <a href="../fornecedores/index.html">Fornecedores</a>
+            <a href="../contas_receber/index.html">Contas a Receber</a>
+            <a href="index.html">Formas de Pagamento</a>
+            <button onclick="realizarLogout()">Sair</button>
+        </nav>
+    </header>
+    <main>
+        <div class="actions">
+            <a href="form.html" class="btn btn-primary">Nova Forma de Pagamento</a>
+        </div>
+        <table id="tableFormasPagamento">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Preenchido dinamicamente via JS -->
+            </tbody>
+        </table>
+    </main>
+    <script src="../../js/config.js"></script>
+    <script src="../../js/formas_pagamento/list.js"></script>
+</body>
+</html>
