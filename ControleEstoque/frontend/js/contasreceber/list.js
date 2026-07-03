@@ -19,6 +19,7 @@ async function carregarContas() {
                 <td>R$ ${conta.valor.toFixed(2)}</td>
                 <td>${dataVencimento}</td>
                 <td><span class="${statusClass}">${conta.status}</span></td>
+                <td>${conta.cliente?.nome || 'Não informado'}</td>
                 <td class="actions">
                     <a href="detalhes.html?id=${conta.id}">Detalhes</a>
                     <a href="form.html?id=${conta.id}">Editar</a>

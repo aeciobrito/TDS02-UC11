@@ -11,7 +11,7 @@ async function buscarDetalhes() {
             <p><strong>Nome:</strong> ${produto.nome}</p>
             <p><strong>Preço:</strong> R$ ${produto.preco.toFixed(2)}</p>
             <p><strong>Quantidade em Estoque:</strong> ${produto.quantidadeEstoque}</p>
-            <p><strong>Fornecedor ID:</strong> ${produto.fornecedorId}</p>
+            <p><strong>Fornecedor:</strong> ${produto.fornecedor?.nomeFantasia || 'Não informado'}</p>
         `;
     } catch (error) {
         document.getElementById('dados-produto').innerHTML = `<p style="color: red;">Erro ao carregar detalhes.</p>`;
