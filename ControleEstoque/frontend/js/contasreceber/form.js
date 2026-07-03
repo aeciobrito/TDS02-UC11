@@ -22,7 +22,7 @@ async function carregarClientes() {
             });
     } catch (error) {
         console.error('Erro ao carregar clientes:', error);
-        alert('Erro ao carregar a lista de clientes');
+        document.getElementById('feedback-message').textContent = 'Erro ao carregar a lista de clientes. A criação/edição de contas não será possível.';
     }
 }
 
@@ -46,7 +46,7 @@ async function carregarConta() {
             document.getElementById('clienteId').value = conta.clienteId;
         } catch (error) {
             console.error('Erro ao carregar conta:', error);
-            alert('Erro ao carregar os dados da conta');
+            document.getElementById('feedback-message').textContent = 'Erro ao carregar os dados da conta. Tente recarregar a página.';
         }
     }
 }

@@ -51,7 +51,6 @@ namespace ControleEstoque.API.Services
                 .ThenInclude(i => i.Produto)
                 .Include(p => p.FormaPagamento)
                 .Where(p => p.ClienteId == clienteId)
-                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -62,7 +61,6 @@ namespace ControleEstoque.API.Services
                 .Include(p => p.Itens)
                 .ThenInclude(i => i.Produto)
                 .Include(p => p.FormaPagamento)
-                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == pedidoId);
         }
     }

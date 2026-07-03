@@ -12,10 +12,10 @@ async function fetchWithToken(url, options = {}) {
     const response = await fetch(url, finalOptions);
     if (response.status === 401) {
         localStorage.removeItem('token');
-        if(window.location.pathname.includes('/html/')) {
-            window.location.href = '../../index.html';
+        if (window.location.pathname.includes('/html/')) {
+            window.location.href = '../../index.html?unauthorized=true';
         } else {
-            window.location.href = 'index.html';
+            window.location.href = 'index.html?unauthorized=true';
         }
     }
     return response;
