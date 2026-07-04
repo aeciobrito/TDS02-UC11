@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Pedido</title>
+
+    <link rel="stylesheet" href="../../css/global.css">
+
+    <script src="../../js/config.js"></script>
+    <script src="../../js/pedidos/detalhes.js" defer></script>
+</head>
+<body>
+
+<header>
+    <h1>Controle de Estoque</h1>
+
+    <nav>
+        <a href="../../index.html">Home</a>
+        <a href="index.html">Pedidos</a>
+    </nav>
+</header>
+
+<main>
+
+    <h2>Detalhes do Pedido</h2>
+
+    <div id="dados-pedido">
+        <p>Carregando...</p>
+    </div>
+
+    <h3>Itens do Pedido</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+
+        <tbody id="tabela-itens"></tbody>
+    </table>
+
+    <br>
+
+    <a href="index.html" class="button">
+        Voltar
+    </a>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alterar Status do Pedido</title>
+
+    <link rel="stylesheet" href="../../css/global.css">
+
+    <script src="../../js/config.js"></script>
+    <script src="../../js/pedidos/form.js" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Controle de Estoque</h1>
+
+        <nav>
+            <a href="../../index.html">Home</a>
+            <a href="index.html">Pedidos</a>
+        </nav>
+    </header>
+
+    <main>
+
+        <h2 id="titulo-pagina">
+            Alterar Status do Pedido
+        </h2>
+
+        <div id="dados-pedido">
+            <p>Carregando dados...</p>
+        </div>
+
+        <form id="form-pedido">
+
+            <label for="status">
+                Status do Pedido:
+            </label>
+
+            <select id="status" required>
+                <option value="1">Aberto</option>
+                <option value="2">Fechado</option>
+                <option value="3">Suspenso</option>
+                <option value="4">Cancelado</option>
+            </select>
+
+            <br><br>
+
+            <button type="submit">
+                Salvar
+            </button>
+
+            <a href="index.html"
+               class="button"
+               style="background-color: #6c757d;">
+                Voltar
+            </a>
+
+        </form>
+
+    </main>
+
+</body>
+</html>
