@@ -35,7 +35,7 @@ namespace ControleEstoque.API.Controllers
         [HttpPost]
         [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> Create([FromBody] CriarProdutoDto dto)
-        {
+        {            
             var novoProduto = await _produtoService.CriarAsync(dto);
             return CreatedAtAction(nameof(GetById), new { id = novoProduto.Id }, novoProduto);
         }
@@ -44,7 +44,7 @@ namespace ControleEstoque.API.Controllers
         [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> Update(int id, [FromBody] AtualizarProdutoDto dto)
         {
-            if (id != dto.Id) return BadRequest("O ID da rota difere do ID do produto.");
+            if (id != dto.Id) return BadRequest("Ação incorreta, O ID da rota difere do ID do produto.");
             
             await _produtoService.AtualizarAsync(dto);
             return NoContent();
