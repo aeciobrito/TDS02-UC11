@@ -29,7 +29,32 @@ namespace ControleEstoque.API.Tests.Controllers
         [Fact]
         public async Task RegistrarCliente_QuandoSucesso_DeveRetornarCreatedAtAction()
         {
+            // Arrange
+            var criarClienteDto = new CriarClienteDto
+            {
+                Nome = "Fulano",
+                CPF = "11122244456",
+                Email = "fulano@mail.com",
+                Senha = "senha123"
+            };
 
+            var service = new Mock<IUsuarioService>();
+            service.Setup(s => s.RegistrarClienteAsync(criarClienteDto)).ReturnsAsync(
+                    new UsuarioDto 
+                    { 
+                        Id = 9,
+                        Nome = "Fulano",
+                        CPF = "11122244456",
+                        Email = "fulano@mail.com"                        
+                    });
+            var controller = new UsuariosController(service.Object);
+
+            // Act
+            var result = await controller.RegistrarCliente(criarClienteDto);
+
+            // Assert
+            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+            Assert.Equal("11122244456", ((UsuarioDto)createdResult.Value!).CPF);
         }
     }
 }
