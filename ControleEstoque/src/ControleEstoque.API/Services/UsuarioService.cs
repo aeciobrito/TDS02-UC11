@@ -88,9 +88,13 @@ namespace ControleEstoque.API.Services
         {
             var cliente = await _context.Clientes.FindAsync(dto.Id);
             if (cliente == null)
-                throw new KeyNotFoundException("Cliente não encontrado.");
+            {
+                // Tenta promover/atualizar perfil se existia sob outro tipo
+                await AlterarPerfilUsuarioAsync(dto.Id, "Cliente", dto.CPF);
+                cliente = await _context.Clientes.FindAsync(dto.Id);
+                if (cliente == null) throw new KeyNotFoundException("Cliente não encontrado.");
+            }
 
-            // Verifica se o novo email já existe (se foi alterado)
             if (cliente.Email != dto.Email)
             {
                 var emailJaExiste = await _context.Usuarios.AnyAsync(u => u.Email == dto.Email && u.Id != dto.Id);
@@ -102,7 +106,6 @@ namespace ControleEstoque.API.Services
             cliente.Email = dto.Email;
             cliente.CPF = dto.CPF;
 
-            // Atualiza senha apenas se fornecida
             if (!string.IsNullOrEmpty(dto.Senha))
                 cliente.SenhaHash = _passwordService.HashPassword(dto.Senha);
 
@@ -114,9 +117,12 @@ namespace ControleEstoque.API.Services
         {
             var caixa = await _context.Caixas.FindAsync(dto.Id);
             if (caixa == null)
-                throw new KeyNotFoundException("Caixa não encontrado.");
+            {
+                await AlterarPerfilUsuarioAsync(dto.Id, "Caixa", dto.Turno);
+                caixa = await _context.Caixas.FindAsync(dto.Id);
+                if (caixa == null) throw new KeyNotFoundException("Caixa não encontrado.");
+            }
 
-            // Verifica se o novo email já existe (se foi alterado)
             if (caixa.Email != dto.Email)
             {
                 var emailJaExiste = await _context.Usuarios.AnyAsync(u => u.Email == dto.Email && u.Id != dto.Id);
@@ -128,7 +134,6 @@ namespace ControleEstoque.API.Services
             caixa.Email = dto.Email;
             caixa.Turno = dto.Turno;
 
-            // Atualiza senha apenas se fornecida
             if (!string.IsNullOrEmpty(dto.Senha))
                 caixa.SenhaHash = _passwordService.HashPassword(dto.Senha);
 
@@ -140,9 +145,12 @@ namespace ControleEstoque.API.Services
         {
             var gerente = await _context.Gerentes.FindAsync(dto.Id);
             if (gerente == null)
-                throw new KeyNotFoundException("Gerente não encontrado.");
+            {
+                await AlterarPerfilUsuarioAsync(dto.Id, "Gerente", dto.Setor);
+                gerente = await _context.Gerentes.FindAsync(dto.Id);
+                if (gerente == null) throw new KeyNotFoundException("Gerente não encontrado.");
+            }
 
-            // Verifica se o novo email já existe (se foi alterado)
             if (gerente.Email != dto.Email)
             {
                 var emailJaExiste = await _context.Usuarios.AnyAsync(u => u.Email == dto.Email && u.Id != dto.Id);
@@ -154,12 +162,37 @@ namespace ControleEstoque.API.Services
             gerente.Email = dto.Email;
             gerente.Setor = dto.Setor;
 
-            // Atualiza senha apenas se fornecida
             if (!string.IsNullOrEmpty(dto.Senha))
                 gerente.SenhaHash = _passwordService.HashPassword(dto.Senha);
 
             _context.Gerentes.Update(gerente);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> AlterarPerfilUsuarioAsync(int id, string novoPerfil, string? extraData)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null) return false;
+
+            if (!Enum.TryParse<PerfilUsuario>(novoPerfil, out var perfilEnum))
+                throw new ArgumentException("Perfil inválido.");
+
+            if (usuario.Perfil != perfilEnum)
+            {
+                await _context.Database.ExecuteSqlRawAsync(
+                    "UPDATE Usuarios SET Discriminator = {0}, Perfil = {1} WHERE Id = {2}",
+                    novoPerfil, (int)perfilEnum, id);
+
+                _context.Entry(usuario).State = EntityState.Detached;
+                usuario = await _context.Usuarios.FindAsync(id);
+            }
+
+            if (usuario is Cliente c && !string.IsNullOrEmpty(extraData)) c.CPF = extraData;
+            else if (usuario is Caixa caixa && !string.IsNullOrEmpty(extraData)) caixa.Turno = extraData;
+            else if (usuario is Gerente g && !string.IsNullOrEmpty(extraData)) g.Setor = extraData;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         #endregion
@@ -208,7 +241,6 @@ namespace ControleEstoque.API.Services
             if (usuario == null)
                 return null;
 
-            // Verifica a senha
             if (!_passwordService.VerifyPassword(dto.Senha, usuario.SenhaHash))
                 return null;
 

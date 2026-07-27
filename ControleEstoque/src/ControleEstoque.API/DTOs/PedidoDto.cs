@@ -6,6 +6,9 @@ namespace ControleEstoque.API.DTOs
         public DateTime DataPedido { get; set; }
         public string Status { get; set; } = string.Empty;
         public int? ClienteId { get; set; }
+        public string ClienteNome { get; set; } = string.Empty;
+        public int? CaixaId { get; set; }
+        public string? CaixaNome { get; set; }
         public int FormaPagamentoId { get; set; }
         public string FormaPagamentoNome { get; set; } = string.Empty;
         public decimal Total => Itens.Sum(i => i.Quantidade * i.PrecoUnitario);
@@ -39,6 +42,9 @@ namespace ControleEstoque.API.DTOs
         public DateTime DataPedido { get; set; }
         public string Status { get; set; } = string.Empty;
         public int? ClienteId { get; set; }
+        public string ClienteNome { get; set; } = string.Empty;
+        public int? CaixaId { get; set; }
+        public string? CaixaNome { get; set; }
         public int FormaPagamentoId { get; set; }
         public string FormaPagamentoNome { get; set; } = string.Empty;
         public decimal Total { get; set; }

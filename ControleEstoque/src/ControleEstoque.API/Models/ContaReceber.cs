@@ -9,7 +9,7 @@ namespace ControleEstoque.API.Models
         public int Id { get; set; }
 
         [Required, StringLength(100)]
-        public string Descricao { get; set; }
+        public string Descricao { get; set; } = string.Empty;
 
         [Required, Column(TypeName = "decimal(10,2)")]
         public decimal Valor { get; set; }
@@ -20,11 +20,11 @@ namespace ControleEstoque.API.Models
         public DateTime? DataPagamento { get; set; }
 
         [Required, StringLength(20)]
-        public string Status { get; set; }
+        public string Status { get; set; } = "Pendente";
 
         [Required]
         public int ClienteId { get; set; }
 
-        public Cliente Cliente { get; set; }
+        public Cliente? Cliente { get; set; }
     }
 }

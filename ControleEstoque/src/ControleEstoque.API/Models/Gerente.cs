@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace ControleEstoque.API.Models
 {
     public class Gerente : Usuario
     {
-        [StringLength(50)]
-        public string Setor { get; set; }
+        [Required, StringLength(50)]
+        public string Setor { get; set; } = string.Empty;
     }
 }

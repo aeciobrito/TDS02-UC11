@@ -6,15 +6,25 @@
     <title>Detalhes do Fornecedor</title>
     <link rel="stylesheet" href="../../css/global.css">
     <script src="../../js/config.js"></script>
+    <script src="../../js/auth.js" defer></script>
+    <script src="../../js/login.js" defer></script>
     <script src="../../js/fornecedores/detalhes.js" defer></script>
 </head>
 <body>
     <header>
         <h1>Controle de Estoque</h1>
-        <nav>
-            <a href="../../index.html">Home</a>
-            <a href="index.html">Fornecedores</a>
-        </nav>
+        <div>
+            <nav>
+                <a href="../../index.html">Home</a>
+                <a href="../produtos/index.html">Produtos</a>
+                <a href="../fornecedores/index.html">Fornecedores</a>
+                <a href="../formaspagamento/index.html">Formas de Pagamento</a>
+                <a href="../contasreceber/index.html">Contas a Receber</a>
+                <a href="../pedidos/index.html">Pedidos</a>
+                <a href="../usuarios/index.html">Usuários</a>
+            </nav>
+            <button onclick="logout()">Sair</button>
+        </div>
     </header>
 
     <main>
@@ -24,7 +34,8 @@
             <p>Carregando dados...</p>
         </div>
 
-        <a href="index.html" class="button">Voltar</a>
+        <br>
+        <a href="index.html">Voltar</a>
     </main>
 </body>
 </html>

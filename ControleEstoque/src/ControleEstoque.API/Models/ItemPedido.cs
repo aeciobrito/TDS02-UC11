@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleEstoque.API.Models
@@ -16,10 +16,10 @@ namespace ControleEstoque.API.Models
 
         [ForeignKey("Pedido")]
         public int PedidoId { get; set; }
-        public Pedido Pedido { get; set; }
+        public Pedido? Pedido { get; set; }
 
         [ForeignKey("Produto")]
         public int ProdutoId { get; set; }
-        public Produto Produto { get; set; }
+        public Produto? Produto { get; set; }
     }
 }

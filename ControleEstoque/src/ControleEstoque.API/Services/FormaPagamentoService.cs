@@ -5,15 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleEstoque.API.Services
 {
-    public interface IFormaPagamentoService
-    {
-        Task<IEnumerable<FormaPagamentoDto>> ObterTodasAsync();
-        Task<FormaPagamentoDto?> ObterPorIdAsync(int id);
-        Task<FormaPagamentoDto> CriarAsync(CriarFormaPagamentoDto dto);
-        Task<FormaPagamentoDto?> AtualizarAsync(int id, CriarFormaPagamentoDto dto);
-        Task<bool> ExcluirAsync(int id);
-    }
-
     public class FormaPagamentoService : IFormaPagamentoService
     {
         private readonly AppDbContext _context;
@@ -26,13 +17,16 @@ namespace ControleEstoque.API.Services
         public async Task<IEnumerable<FormaPagamentoDto>> ObterTodasAsync()
         {
             return await _context.FormasPagamento
+                .AsNoTracking()
                 .Select(f => new FormaPagamentoDto { Id = f.Id, Nome = f.Nome, Ativo = f.Ativo })
                 .ToListAsync();
         }
 
         public async Task<FormaPagamentoDto?> ObterPorIdAsync(int id)
         {
-            var forma = await _context.FormasPagamento.FindAsync(id);
+            var forma = await _context.FormasPagamento
+                .AsNoTracking()
+                .FirstOrDefaultAsync(f => f.Id == id);
             if (forma == null) return null;
 
             return new FormaPagamentoDto { Id = forma.Id, Nome = forma.Nome, Ativo = forma.Ativo };
@@ -47,19 +41,18 @@ namespace ControleEstoque.API.Services
             return new FormaPagamentoDto { Id = forma.Id, Nome = forma.Nome, Ativo = forma.Ativo };
         }
 
-        public async Task<FormaPagamentoDto?> AtualizarAsync(int id, CriarFormaPagamentoDto dto)
+        public async Task<bool> AtualizarAsync(int id, CriarFormaPagamentoDto dto)
         {
             var forma = await _context.FormasPagamento.FindAsync(id);
-            if (forma == null) return null;
+            if (forma == null) return false;
 
             forma.Nome = dto.Nome;
             forma.Ativo = dto.Ativo;
             await _context.SaveChangesAsync();
-
-            return new FormaPagamentoDto { Id = forma.Id, Nome = forma.Nome, Ativo = forma.Ativo };
+            return true;
         }
 
-        public async Task<bool> ExcluirAsync(int id)
+        public async Task<bool> RemoverAsync(int id)
         {
             var forma = await _context.FormasPagamento.FindAsync(id);
             if (forma == null) return false;

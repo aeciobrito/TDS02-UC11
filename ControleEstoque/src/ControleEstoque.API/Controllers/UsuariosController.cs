@@ -1,11 +1,13 @@
 using ControleEstoque.API.DTOs;
 using ControleEstoque.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleEstoque.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class UsuariosController : ControllerBase
     {
         private readonly IUsuarioService _usuarioService;
@@ -15,9 +17,28 @@ namespace ControleEstoque.API.Controllers
             _usuarioService = usuarioService;
         }
 
-        #region Registro
+        #region Autenticação e Registro Público
+
+        [HttpPost("autenticar")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Autenticar([FromBody] LoginDto dto)
+        {
+            try
+            {
+                var resultado = await _usuarioService.AutenticarAsync(dto);
+                if (resultado == null)
+                    return Unauthorized(new { message = "E-mail ou senha incorretos." });
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
         [HttpPost("registrar-cliente")]
+        [AllowAnonymous]
         public async Task<IActionResult> RegistrarCliente([FromBody] CriarClienteDto dto)
         {
             try
@@ -31,7 +52,12 @@ namespace ControleEstoque.API.Controllers
             }
         }
 
+        #endregion
+
+        #region Registro Administrativo (Apenas Gerentes)
+
         [HttpPost("registrar-caixa")]
+        [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> RegistrarCaixa([FromBody] CriarCaixaDto dto)
         {
             try
@@ -46,6 +72,7 @@ namespace ControleEstoque.API.Controllers
         }
 
         [HttpPost("registrar-gerente")]
+        [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> RegistrarGerente([FromBody] CriarGerenteDto dto)
         {
             try
@@ -61,9 +88,10 @@ namespace ControleEstoque.API.Controllers
 
         #endregion
 
-        #region Atualização
+        #region Atualização e Promoção (Apenas Gerentes)
 
         [HttpPut("atualizar-cliente")]
+        [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> AtualizarCliente([FromBody] AtualizarClienteDto dto)
         {
             try
@@ -82,6 +110,7 @@ namespace ControleEstoque.API.Controllers
         }
 
         [HttpPut("atualizar-caixa")]
+        [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> AtualizarCaixa([FromBody] AtualizarCaixaDto dto)
         {
             try
@@ -100,6 +129,7 @@ namespace ControleEstoque.API.Controllers
         }
 
         [HttpPut("atualizar-gerente")]
+        [Authorize(Roles = "Gerente")]
         public async Task<IActionResult> AtualizarGerente([FromBody] AtualizarGerenteDto dto)
         {
             try
@@ -117,30 +147,49 @@ namespace ControleEstoque.API.Controllers
             }
         }
 
+        [HttpPut("{id}/alterar-perfil")]
+        [Authorize(Roles = "Gerente")]
+        public async Task<IActionResult> AlterarPerfil(int id, [FromQuery] string novoPerfil, [FromQuery] string? extra)
+        {
+            try
+            {
+                var alterado = await _usuarioService.AlterarPerfilUsuarioAsync(id, novoPerfil, extra);
+                if (!alterado) return NotFound(new { message = "Usuário não encontrado." });
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         #endregion
 
         #region Consulta
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [Authorize(Roles = "Gerente,Caixa")]
+        public async Task<IActionResult> ObterTodos()
         {
             var usuarios = await _usuarioService.ListarTodosUsuariosAsync();
             return Ok(usuarios);
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Gerente,Caixa")]
         public async Task<IActionResult> ObterPorId(int id)
         {
             var usuario = await _usuarioService.ObterUsuarioPorIdAsync(id);
-            if (usuario == null) return NotFound();
+            if (usuario == null) return NotFound(new { message = "Usuário não encontrado." });
             return Ok(usuario);
         }
 
         [HttpGet("email/{email}")]
+        [Authorize(Roles = "Gerente,Caixa")]
         public async Task<IActionResult> ObterPorEmail(string email)
         {
             var usuario = await _usuarioService.ObterUsuarioPorEmailAsync(email);
-            if (usuario == null) return NotFound();
+            if (usuario == null) return NotFound(new { message = "Usuário não encontrado." });
             return Ok(usuario);
         }
 
@@ -149,7 +198,8 @@ namespace ControleEstoque.API.Controllers
         #region Deleção
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [Authorize(Roles = "Gerente")]
+        public async Task<IActionResult> Excluir(int id)
         {
             try
             {
@@ -159,27 +209,6 @@ namespace ControleEstoque.API.Controllers
             catch (KeyNotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
-            }
-        }
-
-        #endregion
-
-        #region Autenticação
-
-        [HttpPost("autenticar")]
-        public async Task<IActionResult> Autenticar([FromBody] LoginDto dto)
-        {
-            try
-            {
-                var resultado = await _usuarioService.AutenticarAsync(dto);
-                if (resultado == null)
-                    return Unauthorized(new { message = "ERROR: Login ou Senha Inocrretos!" });
-
-                return Ok(resultado);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
             }
         }
 

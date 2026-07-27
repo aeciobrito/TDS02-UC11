@@ -1,102 +1,61 @@
-﻿using ControleEstoque.API.Controllers;
+using ControleEstoque.API.Controllers;
 using ControleEstoque.API.DTOs;
 using ControleEstoque.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
-namespace ControleEstoque.API.Tests.Controllers
+namespace ControleEstoque.API.Tests.Controllers;
+
+public class ProdutosControllerTests
 {
-    public class ProdutosControllerTests
+    [Fact]
+    public async Task ObterPorId_ProdutoNaoEncontrado_DeveRetornarNotFound()
     {
-        [Fact]
-        public async Task GetById_ProdutoNaoEncontrado_DeveRetornarNotFound()
-        {
-            // Arrange
-            var serviceMock = new Mock<IProdutoService>();
-            serviceMock.Setup(sm => sm.ObterPorIdAsync(23))
-                .ReturnsAsync((ProdutoDto?)null);
-            var controller = new ProdutosController(serviceMock.Object);
+        var produtoMock = new Mock<IProdutoService>();
+        produtoMock.Setup(x => x.ObterPorIdAsync(1)).ReturnsAsync((ProdutoDto?)null);
+        var controller = new ProdutosController(produtoMock.Object);
 
-            // Act
-            var result = await controller.GetById(23);
+        var result = await controller.ObterPorId(1);
 
-            // Assert
-            Assert.IsType<NotFoundResult>(result);
-        }
+        Assert.IsType<NotFoundObjectResult>(result);
+    }
 
-        [Fact]
-        public async Task Create_ProdutoCriado_DeveRetornarCreatedAtAction()
-        {
-            // Arrange
-            var produtoDto = new CriarProdutoDto
-            {
-                Nome = "Teclado",
-                Preco = 99.90m,
-                FornecedorId = 1,
-                QuantidadeEstoque = 30
-            };
+    [Fact]
+    public async Task Criar_ProdutoCriado_DeveRetornarCreatedAtAction()
+    {
+        var novoProduto = new ProdutoDto { Id = 1, Nome = "Teclado", Preco = 99.90m, QuantidadeEstoque = 10, FornecedorId = 1 };
+        var produtoMock = new Mock<IProdutoService>();
+        produtoMock.Setup(x => x.CriarAsync(It.IsAny<CriarProdutoDto>())).ReturnsAsync(novoProduto);
+        var controller = new ProdutosController(produtoMock.Object);
 
-            var produtoRetornadoDaService = new ProdutoDto
-            {
-                Id = 23,
-                Nome = "Teclado",
-                Preco = 599.90m,
-                FornecedorId = 1,
-                QuantidadeEstoque = 30
-            };
+        var result = await controller.Criar(new CriarProdutoDto { Nome = "Teclado", Preco = 99.90m, QuantidadeEstoque = 10, FornecedorId = 1 });
 
-            var serviceMock = new Mock<IProdutoService>();
+        var createdResult = Assert.IsType<CreatedAtActionResult>(result);
+        Assert.Equal(nameof(ProdutosController.ObterPorId), createdResult.ActionName);
+        Assert.Equal(1, ((ProdutoDto)createdResult.Value!).Id);
+    }
 
-            serviceMock.Setup(s => s.CriarAsync(produtoDto)).ReturnsAsync(produtoRetornadoDaService);
+    [Fact]
+    public async Task Atualizar_IdDiferente_DeveRetornarBadRequest()
+    {
+        var produtoMock = new Mock<IProdutoService>();
+        var controller = new ProdutosController(produtoMock.Object);
 
-            var controller = new ProdutosController(serviceMock.Object);
+        var result = await controller.Atualizar(2, new AtualizarProdutoDto { Id = 1, Nome = "Mouse", Preco = 50, QuantidadeEstoque = 5, FornecedorId = 1 });
 
-            // Act
-            var result = await controller.Create(produtoDto);
+        var badRequest = Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Contains("ID da rota difere", badRequest.Value?.ToString() ?? string.Empty);
+    }
 
-            // Assert
-            var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-            Assert.Equal(23, ((ProdutoDto)createdResult.Value!).Id);
-            Assert.Equal("Teclado", ((ProdutoDto)createdResult.Value!).Nome);
-        }
+    [Fact]
+    public async Task Excluir_QuandoServicoCompleta_DeveRetornarNoContent()
+    {
+        var produtoMock = new Mock<IProdutoService>();
+        produtoMock.Setup(x => x.RemoverAsync(1)).ReturnsAsync(true);
+        var controller = new ProdutosController(produtoMock.Object);
 
-        [Fact]
-        public async Task Update_IdDiferente_DeveRetornarBadRequest()
-        {
-            // Arrange
-            var serviceMock = new Mock<IProdutoService>();
-            var produtoParaAtualizar = new AtualizarProdutoDto
-            {
-                Id = 23,
-                Nome = "Teclado Mecanico RGB",
-                Preco = 599.90m,
-                FornecedorId = 1,
-                QuantidadeEstoque = 30
-            };
+        var result = await controller.Excluir(1);
 
-            var controller = new ProdutosController(serviceMock.Object);
-
-            // Act
-            var result = await controller.Update(3, produtoParaAtualizar);
-
-            // Assert
-            var badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Contains("Ação incorreta", badRequest.Value?.ToString());
-        }
-
-        [Fact]
-        public async Task Delete_QuandoServicoCompleta_DeveRetornarNoContent()
-        {
-            // Arrange
-            var mock = new Mock<IProdutoService>();
-            mock.Setup(x => x.RemoverAsync(90)).Returns(Task.CompletedTask);
-            var controller = new ProdutosController(mock.Object);
-
-            // Act
-            var result = await controller.Delete(90);
-
-            // Assert
-            Assert.IsType<NoContentResult>(result);
-        }
+        Assert.IsType<NoContentResult>(result);
     }
 }

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace ControleEstoque.API.Models
 {
@@ -15,8 +14,6 @@ namespace ControleEstoque.API.Models
         public bool Ativo { get; set; } = true;
 
         // Relacionamento: Uma Forma de Pagamento pode ter muitos Pedidos
-        // [JsonIgnore] // Evita referência cíclica na serialização do JSON
-        [JsonIgnore]
         public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
     }
 }

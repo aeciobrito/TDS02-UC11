@@ -1,4 +1,4 @@
-﻿﻿using ControleEstoque.API.Data;
+using ControleEstoque.API.Data;
 using ControleEstoque.API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +13,18 @@ namespace ControleEstoque.API.Services
             _context = context;
         }
 
+        public async Task<IEnumerable<Pedido>> ObterTodosPedidosAsync()
+        {
+            return await _context.Pedidos
+                .Include(p => p.Itens)
+                .ThenInclude(i => i.Produto)
+                .Include(p => p.FormaPagamento)
+                .Include(p => p.Cliente)
+                .Include(p => p.Caixa)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<Pedido> CriarPedidoAsync(int clienteId, int formaPagamentoId, List<ItemPedido> itens)
         {
             var formaPgto = await _context.FormasPagamento.FindAsync(formaPagamentoId);
@@ -22,15 +34,13 @@ namespace ControleEstoque.API.Services
             {
                 var produto = await _context.Produtos.FindAsync(item.ProdutoId);
                 if (produto == null) throw new Exception($"Produto {item.ProdutoId} não encontrado no estoque.");
+                if (produto.QuantidadeEstoque < item.Quantidade) throw new Exception($"Estoque insuficiente para o produto {produto.Nome}.");
 
-                // Corrige a falha onde o pedido gravava o item sem preço
                 item.PrecoUnitario = produto.Preco;
-
-                // Reduz do estoque dinamicamente 
                 produto.QuantidadeEstoque -= item.Quantidade;
             }
 
-            var pedido = new Pedido()
+            var pedido = new Pedido
             {
                 ClienteId = clienteId,
                 FormaPagamentoId = formaPagamentoId,
@@ -50,18 +60,36 @@ namespace ControleEstoque.API.Services
                 .Include(p => p.Itens)
                 .ThenInclude(i => i.Produto)
                 .Include(p => p.FormaPagamento)
+                .Include(p => p.Cliente)
+                .Include(p => p.Caixa)
                 .Where(p => p.ClienteId == clienteId)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
         public async Task<Pedido?> ObterPedidoComDetalhesAsync(int pedidoId)
         {
-            // Trazendo as dependências corretamente com Include
             return await _context.Pedidos
                 .Include(p => p.Itens)
                 .ThenInclude(i => i.Produto)
                 .Include(p => p.FormaPagamento)
+                .Include(p => p.Cliente)
+                .Include(p => p.Caixa)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.Id == pedidoId);
+        }
+
+        public async Task<bool> FinalizarPedidoAsync(int pedidoId, int caixaId)
+        {
+            var pedido = await _context.Pedidos.FindAsync(pedidoId);
+            if (pedido == null) return false;
+
+            pedido.Status = "Finalizado";
+            pedido.CaixaId = caixaId;
+
+            _context.Pedidos.Update(pedido);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

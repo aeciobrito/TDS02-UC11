@@ -1,11 +1,18 @@
 const urlParams = new URLSearchParams(window.location.search);
 const id = urlParams.get('id');
 
-const form = document.getElementById('form-fornecedor');
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('form-fornecedor');
+    if (form) {
+        form.addEventListener('submit', salvarFornecedor);
+    }
+    carregarFornecedor();
+});
 
 async function carregarFornecedor() {
     if (id) {
-        document.getElementById('titulo-pagina').innerText = "Editar Fornecedor";
+        const titulo = document.getElementById('titulo-pagina');
+        if (titulo) titulo.innerText = "Editar Fornecedor";
         
         try {
             const response = await fetchWithToken(`${API_BASE_URL}/api/Fornecedores/${id}`);
@@ -13,8 +20,10 @@ async function carregarFornecedor() {
             
             const fornecedor = await response.json();
             
-            document.getElementById('nome').value = fornecedor.nomeFantasia;
-            document.getElementById('cnpj').value = fornecedor.cnpj;
+            const inputNome = document.getElementById('nomeFantasia');
+            const inputCnpj = document.getElementById('cnpj');
+            if (inputNome) inputNome.value = fornecedor.nomeFantasia;
+            if (inputCnpj) inputCnpj.value = fornecedor.cnpj;
         } catch (error) {
             console.error("Erro ao carregar fornecedor:", error);
             alert('Erro ao carregar os dados do fornecedor');
@@ -22,11 +31,15 @@ async function carregarFornecedor() {
     }
 }
 
-form.addEventListener('submit', async (e) => {
+async function salvarFornecedor(e) {
     e.preventDefault();
 
-    const nomeFantasia = document.getElementById('nome').value.trim();
-    const cnpj = document.getElementById('cnpj').value.trim();
+    const inputNome = document.getElementById('nomeFantasia');
+    const inputCnpj = document.getElementById('cnpj');
+    if (!inputNome || !inputCnpj) return;
+
+    const nomeFantasia = inputNome.value.trim();
+    const cnpj = inputCnpj.value.trim();
 
     if (!nomeFantasia || !cnpj) {
         alert('Por favor, preencha todos os campos obrigatórios');
@@ -34,7 +47,7 @@ form.addEventListener('submit', async (e) => {
     }
 
     const fornecedorDados = {
-        id: id ? parseInt(id) : 0,
+        id: id ? parseInt(id, 10) : 0,
         nomeFantasia: nomeFantasia,
         cnpj: cnpj
     };
@@ -56,6 +69,4 @@ form.addEventListener('submit', async (e) => {
         console.error("Erro ao salvar:", error);
         alert('Erro ao salvar o fornecedor. Tente novamente.');
     }
-});
-
-carregarFornecedor();
+}

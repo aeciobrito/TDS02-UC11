@@ -25,6 +25,7 @@ namespace ControleEstoque.API.Services
                     Nome = p.Nome,
                     Preco = p.Preco,
                     QuantidadeEstoque = p.QuantidadeEstoque,
+                    ImagemUrl = p.ImagemUrl,
                     FornecedorId = p.FornecedorId,
                     Fornecedor = p.Fornecedor != null ? new FornecedorDto 
                     { 
@@ -51,6 +52,7 @@ namespace ControleEstoque.API.Services
                 Nome = produto.Nome,
                 Preco = produto.Preco,
                 QuantidadeEstoque = produto.QuantidadeEstoque,
+                ImagemUrl = produto.ImagemUrl,
                 FornecedorId = produto.FornecedorId,
                 Fornecedor = produto.Fornecedor != null ? new FornecedorDto 
                 { 
@@ -72,8 +74,9 @@ namespace ControleEstoque.API.Services
             var produto = new Produto
             {
                 Nome = dto.Nome,
-                Preco = dto.Preco, // Garante cadastro do preço do produto corretamente
+                Preco = dto.Preco,
                 QuantidadeEstoque = dto.QuantidadeEstoque,
+                ImagemUrl = dto.ImagemUrl,
                 FornecedorId = dto.FornecedorId
             };
 
@@ -86,39 +89,41 @@ namespace ControleEstoque.API.Services
                 Nome = produto.Nome,
                 Preco = produto.Preco,
                 QuantidadeEstoque = produto.QuantidadeEstoque,
+                ImagemUrl = produto.ImagemUrl,
                 FornecedorId = produto.FornecedorId
             };
         }
 
-        public async Task AtualizarAsync(AtualizarProdutoDto dto)
+        public async Task<bool> AtualizarAsync(AtualizarProdutoDto dto)
         {
             var produto = await _context.Produtos.FindAsync(dto.Id);
-            if (produto != null)
+            if (produto == null) return false;
+
+            var fornecedorExiste = await _context.Fornecedores.AnyAsync(f => f.Id == dto.FornecedorId);
+            if (!fornecedorExiste)
             {
-                var fornecedorExiste = await _context.Fornecedores.AnyAsync(f => f.Id == dto.FornecedorId);
-                if (!fornecedorExiste)
-                {
-                    throw new ArgumentException("O fornecedor informado não existe.");
-                }
-
-                produto.Nome = dto.Nome;
-                produto.Preco = dto.Preco;
-                produto.QuantidadeEstoque = dto.QuantidadeEstoque;
-                produto.FornecedorId = dto.FornecedorId;
-
-                _context.Produtos.Update(produto);
-                await _context.SaveChangesAsync();
+                throw new ArgumentException("O fornecedor informado não existe.");
             }
+
+            produto.Nome = dto.Nome;
+            produto.Preco = dto.Preco;
+            produto.QuantidadeEstoque = dto.QuantidadeEstoque;
+            produto.ImagemUrl = dto.ImagemUrl;
+            produto.FornecedorId = dto.FornecedorId;
+
+            _context.Produtos.Update(produto);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task RemoverAsync(int id)
+        public async Task<bool> RemoverAsync(int id)
         {
             var produto = await _context.Produtos.FindAsync(id);
-            if (produto != null)
-            {
-                _context.Produtos.Remove(produto);
-                await _context.SaveChangesAsync();
-            }
+            if (produto == null) return false;
+
+            _context.Produtos.Remove(produto);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

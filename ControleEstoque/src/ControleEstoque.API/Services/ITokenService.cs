@@ -37,7 +37,8 @@ namespace ControleEstoque.API.Services
                 new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
                 new Claim(ClaimTypes.Email, usuario.Email),
                 new Claim(ClaimTypes.Name, usuario.Nome),
-                new Claim(ClaimTypes.Role, usuario.Perfil.ToString())
+                new Claim(ClaimTypes.Role, usuario.Perfil.ToString()),
+                new Claim("role", usuario.Perfil.ToString())
             };
 
             var token = new JwtSecurityToken(

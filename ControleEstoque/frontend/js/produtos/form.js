@@ -39,6 +39,7 @@ async function carregarProduto() {
             document.getElementById('nome').value = produto.nome;
             document.getElementById('preco').value = produto.preco;
             document.getElementById('quantidadeEstoque').value = produto.quantidadeEstoque;
+            document.getElementById('imagemUrl').value = produto.imagemUrl || '';
             document.getElementById('fornecedorId').value = produto.fornecedorId;
         } catch (error) {
             console.error('Erro ao carregar produto:', error);
@@ -53,6 +54,7 @@ form.addEventListener('submit', async (e) => {
     const nome = document.getElementById('nome').value.trim();
     const preco = parseFloat(document.getElementById('preco').value);
     const quantidadeEstoque = parseInt(document.getElementById('quantidadeEstoque').value, 10);
+    const imagemUrl = document.getElementById('imagemUrl').value.trim();
     const fornecedorId = parseInt(document.getElementById('fornecedorId').value, 10);
 
     if (!nome || Number.isNaN(preco) || preco < 0 || Number.isNaN(quantidadeEstoque) || quantidadeEstoque < 0 || Number.isNaN(fornecedorId) || fornecedorId <= 0) {
@@ -65,6 +67,7 @@ form.addEventListener('submit', async (e) => {
         nome: nome,
         preco: preco,
         quantidadeEstoque: quantidadeEstoque,
+        imagemUrl: imagemUrl || null,
         fornecedorId: fornecedorId
     };
 

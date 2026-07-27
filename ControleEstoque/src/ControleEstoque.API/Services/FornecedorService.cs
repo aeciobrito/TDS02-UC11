@@ -62,27 +62,27 @@ namespace ControleEstoque.API.Services
             };
         }
 
-        public async Task AtualizarAsync(AtualizarFornecedorDto dto)
+        public async Task<bool> AtualizarAsync(AtualizarFornecedorDto dto)
         {
             var fornecedor = await _context.Fornecedores.FindAsync(dto.Id);
-            if (fornecedor != null)
-            {
-                fornecedor.NomeFantasia = dto.NomeFantasia;
-                fornecedor.CNPJ = dto.CNPJ;
-                
-                _context.Fornecedores.Update(fornecedor);
-                await _context.SaveChangesAsync();
-            }
+            if (fornecedor == null) return false;
+
+            fornecedor.NomeFantasia = dto.NomeFantasia;
+            fornecedor.CNPJ = dto.CNPJ;
+
+            _context.Fornecedores.Update(fornecedor);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task RemoverAsync(int id)
+        public async Task<bool> RemoverAsync(int id)
         {
             var fornecedor = await _context.Fornecedores.FindAsync(id);
-            if (fornecedor != null)
-            {
-                _context.Fornecedores.Remove(fornecedor);
-                await _context.SaveChangesAsync();
-            }
+            if (fornecedor == null) return false;
+
+            _context.Fornecedores.Remove(fornecedor);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

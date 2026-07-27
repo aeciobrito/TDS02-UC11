@@ -37,6 +37,30 @@ namespace ControleEstoque.API.Services
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<ContaReceberDto>> ObterPorClienteIdAsync(int clienteId)
+        {
+            return await _context.ContasReceber
+                .Include(c => c.Cliente)
+                .Where(c => c.ClienteId == clienteId)
+                .AsNoTracking()
+                .Select(c => new ContaReceberDto
+                {
+                    Id = c.Id,
+                    Descricao = c.Descricao,
+                    Valor = c.Valor,
+                    DataVencimento = c.DataVencimento,
+                    DataPagamento = c.DataPagamento,
+                    Status = c.Status,
+                    ClienteId = c.ClienteId,
+                    Cliente = c.Cliente != null ? new ClienteDto 
+                    { 
+                        Id = c.Cliente.Id, 
+                        Nome = c.Cliente.Nome 
+                    } : null
+                })
+                .ToListAsync();
+        }
+
         public async Task<ContaReceberDto?> ObterPorIdAsync(int id)
         {
             var conta = await _context.ContasReceber
@@ -96,37 +120,37 @@ namespace ControleEstoque.API.Services
             };
         }
 
-        public async Task AtualizarAsync(AtualizarContaReceberDto dto)
+        public async Task<bool> AtualizarAsync(AtualizarContaReceberDto dto)
         {
             var conta = await _context.ContasReceber.FindAsync(dto.Id);
-            if (conta != null)
+            if (conta == null) return false;
+
+            var clienteExiste = await _context.Clientes.AnyAsync(c => c.Id == dto.ClienteId);
+            if (!clienteExiste)
             {
-                var clienteExiste = await _context.Clientes.AnyAsync(c => c.Id == dto.ClienteId);
-                if (!clienteExiste)
-                {
-                    throw new ArgumentException("O cliente informado não existe.");
-                }
-
-                conta.Descricao = dto.Descricao;
-                conta.Valor = dto.Valor;
-                conta.DataVencimento = dto.DataVencimento;
-                conta.DataPagamento = dto.DataPagamento;
-                conta.Status = dto.Status;
-                conta.ClienteId = dto.ClienteId;
-
-                _context.ContasReceber.Update(conta);
-                await _context.SaveChangesAsync();
+                throw new ArgumentException("O cliente informado não existe.");
             }
+
+            conta.Descricao = dto.Descricao;
+            conta.Valor = dto.Valor;
+            conta.DataVencimento = dto.DataVencimento;
+            conta.DataPagamento = dto.DataPagamento;
+            conta.Status = dto.Status;
+            conta.ClienteId = dto.ClienteId;
+
+            _context.ContasReceber.Update(conta);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task RemoverAsync(int id)
+        public async Task<bool> RemoverAsync(int id)
         {
             var conta = await _context.ContasReceber.FindAsync(id);
-            if (conta != null)
-            {
-                _context.ContasReceber.Remove(conta);
-                await _context.SaveChangesAsync();
-            }
+            if (conta == null) return false;
+
+            _context.ContasReceber.Remove(conta);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

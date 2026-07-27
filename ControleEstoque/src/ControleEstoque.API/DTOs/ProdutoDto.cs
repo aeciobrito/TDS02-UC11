@@ -6,6 +6,7 @@ namespace ControleEstoque.API.DTOs
         public string Nome { get; set; } = string.Empty;
         public decimal Preco { get; set; }
         public int QuantidadeEstoque { get; set; }
+        public string? ImagemUrl { get; set; }
         public int FornecedorId { get; set; }
         public FornecedorDto? Fornecedor { get; set; }
     }
@@ -15,6 +16,7 @@ namespace ControleEstoque.API.DTOs
         public string Nome { get; set; } = string.Empty;
         public decimal Preco { get; set; }
         public int QuantidadeEstoque { get; set; }
+        public string? ImagemUrl { get; set; }
         public int FornecedorId { get; set; }
     }
 
@@ -24,6 +26,7 @@ namespace ControleEstoque.API.DTOs
         public string Nome { get; set; } = string.Empty;
         public decimal Preco { get; set; }
         public int QuantidadeEstoque { get; set; }
+        public string? ImagemUrl { get; set; }
         public int FornecedorId { get; set; }
     }
 }

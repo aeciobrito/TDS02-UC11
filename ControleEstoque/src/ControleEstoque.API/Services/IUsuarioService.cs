@@ -13,6 +13,7 @@ namespace ControleEstoque.API.Services
         Task AtualizarClienteAsync(AtualizarClienteDto dto);
         Task AtualizarCaixaAsync(AtualizarCaixaDto dto);
         Task AtualizarGerenteAsync(AtualizarGerenteDto dto);
+        Task<bool> AlterarPerfilUsuarioAsync(int id, string novoPerfil, string? extraData);
 
         // Consulta
         Task<IEnumerable<UsuarioDto>> ListarTodosUsuariosAsync();

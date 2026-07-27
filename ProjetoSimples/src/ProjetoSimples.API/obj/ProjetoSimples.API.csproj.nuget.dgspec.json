@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/aecio/TDS02-UC11/ProjetoSimples/src/ProjetoSimples.API/ProjetoSimples.API.csproj": {}
+    "C:\\Github\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\ProjetoSimples.API.csproj": {}
   },
   "projects": {
-    "/home/aecio/TDS02-UC11/ProjetoSimples/src/ProjetoSimples.API/ProjetoSimples.API.csproj": {
+    "C:\\Github\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\ProjetoSimples.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/aecio/TDS02-UC11/ProjetoSimples/src/ProjetoSimples.API/ProjetoSimples.API.csproj",
+        "projectUniqueName": "C:\\Github\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\ProjetoSimples.API.csproj",
         "projectName": "ProjetoSimples.API",
-        "projectPath": "/home/aecio/TDS02-UC11/ProjetoSimples/src/ProjetoSimples.API/ProjetoSimples.API.csproj",
-        "packagesPath": "/home/aecio/.nuget/packages/",
-        "outputPath": "/home/aecio/TDS02-UC11/ProjetoSimples/src/ProjetoSimples.API/obj/",
+        "projectPath": "C:\\Github\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\ProjetoSimples.API.csproj",
+        "packagesPath": "C:\\Users\\aecio\\.nuget\\packages\\",
+        "outputPath": "C:\\Github\\TDS02-UC11\\ProjetoSimples\\src\\ProjetoSimples.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/aecio/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\aecio\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -32,7 +32,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net8.0": {
@@ -62,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.128/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

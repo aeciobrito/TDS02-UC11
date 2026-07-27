@@ -7,7 +7,7 @@ namespace ControleEstoque.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Gerente")]
+    [Authorize]
     public class FornecedoresController : ControllerBase
     {
         private readonly IFornecedorService _fornecedorService;
@@ -18,40 +18,47 @@ namespace ControleEstoque.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [Authorize(Roles = "Gerente,Caixa")]
+        public async Task<IActionResult> ObterTodos()
         {
             var fornecedores = await _fornecedorService.ObterTodosAsync();
             return Ok(fornecedores);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        [Authorize(Roles = "Gerente,Caixa")]
+        public async Task<IActionResult> ObterPorId(int id)
         {
             var fornecedor = await _fornecedorService.ObterPorIdAsync(id);
-            if (fornecedor == null) return NotFound();
+            if (fornecedor == null) return NotFound(new { message = "Fornecedor não encontrado." });
             return Ok(fornecedor);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CriarFornecedorDto dto)
+        [Authorize(Roles = "Gerente")]
+        public async Task<IActionResult> Criar([FromBody] CriarFornecedorDto dto)
         {
             var novoFornecedor = await _fornecedorService.CriarAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = novoFornecedor.Id }, novoFornecedor);
+            return CreatedAtAction(nameof(ObterPorId), new { id = novoFornecedor.Id }, novoFornecedor);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] AtualizarFornecedorDto dto)
+        [Authorize(Roles = "Gerente")]
+        public async Task<IActionResult> Atualizar(int id, [FromBody] AtualizarFornecedorDto dto)
         {
-            if (id != dto.Id) return BadRequest("O ID da rota difere do ID do fornecedor.");
-            
-            await _fornecedorService.AtualizarAsync(dto);
+            if (id != dto.Id) return BadRequest(new { message = "O ID da rota difere do ID do fornecedor." });
+
+            var atualizado = await _fornecedorService.AtualizarAsync(dto);
+            if (!atualizado) return NotFound(new { message = "Fornecedor não encontrado." });
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [Authorize(Roles = "Gerente")]
+        public async Task<IActionResult> Excluir(int id)
         {
-            await _fornecedorService.RemoverAsync(id);
+            var removido = await _fornecedorService.RemoverAsync(id);
+            if (!removido) return NotFound(new { message = "Fornecedor não encontrado." });
             return NoContent();
         }
     }

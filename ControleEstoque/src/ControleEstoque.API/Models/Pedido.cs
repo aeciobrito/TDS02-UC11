@@ -1,4 +1,4 @@
-﻿﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleEstoque.API.Models
@@ -11,20 +11,20 @@ namespace ControleEstoque.API.Models
         public DateTime DataPedido { get; set; } = DateTime.Now;
 
         [Required, StringLength(20)]
-        public string Status { get; set; } // aberto, fechado, supspenso...
+        public string Status { get; set; } = "Aberto";
 
-        [ForeignKey("Cliente")] // Cliente que fez o pedido
+        [ForeignKey("Cliente")]
         public int ClienteId { get; set; }
-        public Cliente Cliente { get; set; }
+        public Cliente? Cliente { get; set; }
 
-        [ForeignKey("Caixa")] // Caixa que fecha o pedido
+        [ForeignKey("Caixa")]
         public int? CaixaId { get; set; }
-        public Caixa Caixa { get; set; }
+        public Caixa? Caixa { get; set; }
 
         [ForeignKey("FormaPagamento")]
         public int FormaPagamentoId { get; set; }
-        public FormaPagamento FormaPagamento { get; set; }
+        public FormaPagamento? FormaPagamento { get; set; }
 
-        public ICollection<ItemPedido> Itens { get; set; } = new List<ItemPedido>();        
+        public ICollection<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
     }
 }

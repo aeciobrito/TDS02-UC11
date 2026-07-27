@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ControleEstoque.API.Models
@@ -9,7 +9,7 @@ namespace ControleEstoque.API.Models
         public int Id { get; set; }
 
         [Required, StringLength(100)]
-        public string Nome { get; set; }
+        public string Nome { get; set; } = string.Empty;
 
         [Required, Column(TypeName = "decimal(10,2)")]
         public decimal Preco { get; set; }
@@ -17,9 +17,12 @@ namespace ControleEstoque.API.Models
         [Required]
         public int QuantidadeEstoque { get; set; }
 
+        [StringLength(255)]
+        public string? ImagemUrl { get; set; }
+
         [ForeignKey("Fornecedor")]
         public int FornecedorId { get; set; }
-        public Fornecedor Fornecedor { get; set; }
+        public Fornecedor? Fornecedor { get; set; }
 
         public ICollection<ItemPedido> ItensPedido { get; set; } = new List<ItemPedido>();
     }

@@ -7,7 +7,7 @@ namespace ControleEstoque.API.Services
         Task<IEnumerable<ProdutoDto>> ObterTodosAsync();
         Task<ProdutoDto?> ObterPorIdAsync(int id);
         Task<ProdutoDto> CriarAsync(CriarProdutoDto dto);
-        Task AtualizarAsync(AtualizarProdutoDto dto);
-        Task RemoverAsync(int id);
+        Task<bool> AtualizarAsync(AtualizarProdutoDto dto);
+        Task<bool> RemoverAsync(int id);
     }
 }

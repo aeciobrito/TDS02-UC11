@@ -18,43 +18,59 @@ namespace ControleEstoque.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> ObterTodos()
         {
             var produtos = await _produtoService.ObterTodosAsync();
             return Ok(produtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> ObterPorId(int id)
         {
             var produto = await _produtoService.ObterPorIdAsync(id);
-            if (produto == null) return NotFound();
+            if (produto == null) return NotFound(new { message = "Produto n√£o encontrado." });
             return Ok(produto);
         }
 
         [HttpPost]
         [Authorize(Roles = "Gerente")]
-        public async Task<IActionResult> Create([FromBody] CriarProdutoDto dto)
-        {            
-            var novoProduto = await _produtoService.CriarAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = novoProduto.Id }, novoProduto);
+        public async Task<IActionResult> Criar([FromBody] CriarProdutoDto dto)
+        {
+            try
+            {
+                var novoProduto = await _produtoService.CriarAsync(dto);
+                return CreatedAtAction(nameof(ObterPorId), new { id = novoProduto.Id }, novoProduto);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Gerente")]
-        public async Task<IActionResult> Update(int id, [FromBody] AtualizarProdutoDto dto)
+        public async Task<IActionResult> Atualizar(int id, [FromBody] AtualizarProdutoDto dto)
         {
-            if (id != dto.Id) return BadRequest("AÁ„o incorreta, O ID da rota difere do ID do produto.");
-            
-            await _produtoService.AtualizarAsync(dto);
-            return NoContent();
+            if (id != dto.Id) return BadRequest(new { message = "O ID da rota difere do ID do produto." });
+
+            try
+            {
+                var atualizado = await _produtoService.AtualizarAsync(dto);
+                if (!atualizado) return NotFound(new { message = "Produto n√£o encontrado." });
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Gerente")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Excluir(int id)
         {
-            await _produtoService.RemoverAsync(id);
+            var removido = await _produtoService.RemoverAsync(id);
+            if (!removido) return NotFound(new { message = "Produto n√£o encontrado." });
             return NoContent();
         }
     }
